@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addData, updateData, deleteData } from "../src/redux/actions/actions";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ const App = () => {
   const [editId, setEditId] = useState(null);
 
   const data = useSelector((state) => state.data);
+
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -33,7 +35,11 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteData(id));
+    if (editMode) {
+      toast.error("Please complete the editing first ");
+    } else {
+      dispatch(deleteData(id));
+    }
   };
 
   return (
@@ -41,6 +47,7 @@ const App = () => {
       <h3 className="text-center">CRUD Example</h3>
       <form onSubmit={handleSubmit}>
         <input
+          required
           className="form-control m-3"
           type="text"
           placeholder="Name"
@@ -48,6 +55,7 @@ const App = () => {
           onChange={(e) => setName(e.target.value)}
         />
         <input
+          required
           type="text"
           className="form-control m-3"
           placeholder="Email"
@@ -74,25 +82,28 @@ const App = () => {
               <td>{index + 1}</td>
               <td>{item.name}</td>
               <td>{item.email}</td>
-              <div className="container text-center p-2">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleEdit(item.id)}
-                >
-                  Edit
-                </button>
+              <td>
+                <div className="container text-center p-2">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleEdit(item.id)}
+                  >
+                    Edit
+                  </button>
 
-                <button
-                  className="btn btn-danger mx-2"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  Delete
-                </button>
-              </div>
+                  <button
+                    className="btn btn-danger mx-2"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         ))}
       </table>
+      <ToastContainer />
     </div>
   );
 };

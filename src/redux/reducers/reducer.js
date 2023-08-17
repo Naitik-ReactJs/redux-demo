@@ -1,5 +1,5 @@
 const initialState = {
-  data: [],
+  data: [{ id: 1692273892964, name: "Demo name", email: "n@tg.co" }],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {

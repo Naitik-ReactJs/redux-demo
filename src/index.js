@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 store.subscribe(() => {
-  console.log(store.getState(), "this is subscription");
+  console.log(store.getState(), "this is updated state");
 });
 root.render(
   <Provider store={store}>

@@ -7,10 +7,12 @@ import { updateData } from "./redux/actions/Form/updateAction";
 import { deleteData } from "./redux/actions/Form/deleteAction";
 
 const App = () => {
-  const [formData, setFormData] = useState({ name: "", email: "" });
-  const [isEditing, setIsEditing] = useState(false);
-  const [editItemId, setEditItemId] = useState(null);
-
+  const [formData, setFormData] = useState({
+    name: "xyz",
+    email: "xyz@gmail.com",
+  });
+  const [updateTableData, setUpdateTableData] = useState(false);
+  const [dataId, setDataId] = useState(null);
   const data = useSelector((state) => state.data);
   const dispatch = useDispatch();
 
@@ -24,14 +26,14 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isEditing) {
-      dispatch(updateData({ id: editItemId, ...formData }));
-      setIsEditing(false);
-      setEditItemId(null);
+    if (updateTableData) {
+      dispatch(updateData({ id: dataId, ...formData }));
+      setUpdateTableData(false);
+      setDataId(null);
     } else {
       dispatch(addData({ id: Math.random(), ...formData }));
     }
-    console.log(formData);
+
     setFormData({ name: "", email: "" });
     toast.success("Thank you for submitting", {
       icon: "🚀",
@@ -39,17 +41,15 @@ const App = () => {
   };
 
   const handleEdit = (id) => {
-    const itemToEdit = data.find((item) => item.id === id);
-    setFormData({ name: itemToEdit.name, email: itemToEdit.email });
-    setIsEditing(true);
-    setEditItemId(id);
+    const dataToEdit = data.find((item) => item.id === id);
+    setFormData({ name: dataToEdit.name, email: dataToEdit.email });
+    setUpdateTableData(true);
+    setDataId(id);
   };
 
   const handleDelete = (id) => {
-    if (isEditing) {
-      toast.warning("Please complete the editing first ", {
-        duration: 1000,
-      });
+    if (updateTableData) {
+      toast.warning("Please complete the editing first ");
     } else {
       dispatch(deleteData(id));
       toast.info("Deleted successfully");
@@ -79,7 +79,7 @@ const App = () => {
           onChange={handleInputChange}
         />
         <button className="btn m-3 btn-dark" type="submit">
-          {isEditing ? "Update" : "Add"}
+          {updateTableData ? "Update" : "Add"}
         </button>
       </form>
       <table className="table table-secondary table-bordered table-striped mt-4">

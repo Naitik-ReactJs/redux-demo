@@ -2,30 +2,35 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addData } from "./redux/actions/addAction";
-import { updateData } from "./redux/actions/updateAction";
-import { deleteData } from "./redux/actions/deleteAction";
+import { addData, updateData, deleteData } from "./redux/actions"; // Combined imports
+import "./App.css"; // Import your custom styles if needed
+
 const App = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
+  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editItemId, setEditItemId] = useState(null);
 
   const data = useSelector((state) => state.data);
-
   const dispatch = useDispatch();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (editMode) {
-      dispatch(updateData({ id: editId, name, email }));
-      setEditMode(false);
-      setEditId(null);
+    if (isEditing) {
+      dispatch(updateData({ id: editItemId, ...formData }));
+      setIsEditing(false);
+      setEditItemId(null);
     } else {
-      dispatch(addData({ id: Math.random(), name, email }));
+      dispatch(addData({ id: Math.random(), ...formData }));
     }
-    setName("");
-    setEmail("");
+    setFormData({ name: "", email: "" });
     toast.success("Thank you for submitting", {
       icon: "🚀",
     });
@@ -33,14 +38,13 @@ const App = () => {
 
   const handleEdit = (id) => {
     const itemToEdit = data.find((item) => item.id === id);
-    setName(itemToEdit.name);
-    setEmail(itemToEdit.email);
-    setEditMode(true);
-    setEditId(id);
+    setFormData({ name: itemToEdit.name, email: itemToEdit.email });
+    setIsEditing(true);
+    setEditItemId(id);
   };
 
   const handleDelete = (id) => {
-    if (editMode) {
+    if (isEditing) {
       toast.warning("Please complete the editing first ", {
         duration: 1000,
       });
@@ -49,28 +53,31 @@ const App = () => {
       toast.info("Deleted successfully");
     }
   };
+
   return (
     <div className="container my-5">
-      <h3 className="text-center m-5 ">Redux demo using CRUD</h3>
+      <h3 className="text-center m-5">Redux demo using CRUD</h3>
       <form onSubmit={handleSubmit}>
         <input
           required
           className="form-control m-3"
           type="text"
+          name="name"
           placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleInputChange}
         />
         <input
           required
           type="text"
           className="form-control m-3"
+          name="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleInputChange}
         />
         <button className="btn m-3 btn-dark" type="submit">
-          {editMode ? "Update" : "Add"}
+          {isEditing ? "Update" : "Add"}
         </button>
       </form>
       <table className="table table-secondary table-bordered table-striped mt-4">
@@ -97,7 +104,6 @@ const App = () => {
                   >
                     Edit
                   </button>
-
                   <button
                     className="btn btn-danger mx-2"
                     onClick={() => handleDelete(item.id)}

@@ -10,9 +10,9 @@ store.subscribe(() => {
   console.log(store.getState(), "updated state");
 });
 root.render(
-  <Provider store={store}>
-    <React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
       <App />
-    </React.StrictMode>
-  </Provider>
+    </Provider>
+  </React.StrictMode>
 );

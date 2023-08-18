@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addData } from "./redux/actions/Form/addAction";
-import { updateData } from "./redux/actions/Form/updateAction";
-import { deleteData } from "./redux/actions/Form/deleteAction";
+import { addData } from "./redux/actions/Form/addDataToTableAction";
+import { updateData } from "./redux/actions/Form/updateTableDataAction";
+import { deleteData } from "./redux/actions/Form/deleteTableDataAction";
 
 const App = () => {
   const [formData, setFormData] = useState({
     name: "xyz",
     email: "xyz@gmail.com",
   });
-  const [updateTableData, setUpdateTableData] = useState(false);
+  const [editTableData, setEditTableData] = useState(false);
   const [dataId, setDataId] = useState(null);
-  const data = useSelector((state) => state.data);
+  const dataContainer = useSelector((state) => state.dataContainer);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -26,9 +26,9 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (updateTableData) {
+    if (editTableData) {
       dispatch(updateData({ id: dataId, ...formData }));
-      setUpdateTableData(false);
+      setEditTableData(false);
       setDataId(null);
     } else {
       dispatch(addData({ id: Math.random(), ...formData }));
@@ -41,14 +41,14 @@ const App = () => {
   };
 
   const handleEdit = (id) => {
-    const dataToEdit = data.find((item) => item.id === id);
+    const dataToEdit = dataContainer.find((item) => item.id === id);
     setFormData({ name: dataToEdit.name, email: dataToEdit.email });
-    setUpdateTableData(true);
+    setEditTableData(true);
     setDataId(id);
   };
 
   const handleDelete = (id) => {
-    if (updateTableData) {
+    if (editTableData) {
       toast.warning("Please complete the editing first ");
     } else {
       dispatch(deleteData(id));
@@ -79,7 +79,7 @@ const App = () => {
           onChange={handleInputChange}
         />
         <button className="btn m-3 btn-dark" type="submit">
-          {updateTableData ? "Update" : "Add"}
+          {editTableData ? "Update" : "Add"}
         </button>
       </form>
       <table className="table table-secondary table-bordered table-striped mt-4">
@@ -92,7 +92,7 @@ const App = () => {
           </tr>
         </thead>
 
-        {data.map((item, index) => (
+        {dataContainer.map((item, index) => (
           <tbody className="table-hover" key={index}>
             <tr>
               <td>{index + 1}</td>
@@ -118,7 +118,7 @@ const App = () => {
           </tbody>
         ))}
       </table>
-      <ToastContainer autoClose={1000} theme="colored" />
+      <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );
 };

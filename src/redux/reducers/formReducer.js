@@ -1,28 +1,28 @@
 const initialState = {
-  data: [{ id: 1692273892964, name: "Demo name", email: "n@tg.co" }],
+  dataContainer: [{ id: 1692273892964, name: "Demo name", email: "n@tg.co" }],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_DATA":
       return {
         ...state,
-        data: [...state.data, action.payload],
+        dataContainer: [...state.dataContainer, action.payload],
       };
     case "UPDATE_DATA":
-      const updatedData = state.data.map((item) =>
+      const updatedData = state.dataContainer.map((item) =>
         item.id === action.payload.id ? action.payload : item
       );
       return {
         ...state,
-        data: updatedData,
+        dataContainer: updatedData,
       };
     case "DELETE_DATA":
-      const filteredData = state.data.filter(
+      const filteredData = state.dataContainer.filter(
         (item) => item.id !== action.payload
       );
       return {
         ...state,
-        data: filteredData,
+        dataContainer: filteredData,
       };
     default:
       return state;

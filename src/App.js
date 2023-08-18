@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addData, updateData, deleteData } from "../src/redux/actions/actions";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { addData } from "./redux/actions/addAction";
+import { updateData } from "./redux/actions/updateAction";
+import { deleteData } from "./redux/actions/deleteAction";
 const App = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,10 +22,13 @@ const App = () => {
       setEditMode(false);
       setEditId(null);
     } else {
-      dispatch(addData({ id: Date.now(), name, email }));
+      dispatch(addData({ id: Math.random(), name, email }));
     }
     setName("");
     setEmail("");
+    toast.success("Thank you for submitting", {
+      icon: "🚀",
+    });
   };
 
   const handleEdit = (id) => {
@@ -36,15 +41,17 @@ const App = () => {
 
   const handleDelete = (id) => {
     if (editMode) {
-      toast.error("Please complete the editing first ");
+      toast.warning("Please complete the editing first ", {
+        duration: 1000,
+      });
     } else {
       dispatch(deleteData(id));
+      toast.info("Deleted successfully");
     }
   };
-
   return (
     <div className="container my-5">
-      <h3 className="text-center">CRUD Example</h3>
+      <h3 className="text-center m-5 ">Redux demo using CRUD</h3>
       <form onSubmit={handleSubmit}>
         <input
           required
@@ -62,12 +69,12 @@ const App = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button className="btn m-3" type="submit">
+        <button className="btn m-3 btn-dark" type="submit">
           {editMode ? "Update" : "Add"}
         </button>
       </form>
-      <table className="table table-bordered table-striped">
-        <thead>
+      <table className="table table-secondary table-bordered table-striped mt-4">
+        <thead className="thead-dark">
           <tr>
             <th scope="col">Sr.</th>
             <th scope="col">Name</th>
@@ -103,7 +110,7 @@ const App = () => {
           </tbody>
         ))}
       </table>
-      <ToastContainer />
+      <ToastContainer autoClose={1000} theme="colored" />
     </div>
   );
 };

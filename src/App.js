@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addData, updateData, deleteData } from "./redux/actions"; // Combined imports
-import "./App.css"; // Import your custom styles if needed
+import { addData } from "./redux/actions/Form/addAction";
+import { updateData } from "./redux/actions/Form/updateAction";
+import { deleteData } from "./redux/actions/Form/deleteAction";
 
 const App = () => {
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -30,6 +31,7 @@ const App = () => {
     } else {
       dispatch(addData({ id: Math.random(), ...formData }));
     }
+    console.log(formData);
     setFormData({ name: "", email: "" });
     toast.success("Thank you for submitting", {
       icon: "🚀",

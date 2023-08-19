@@ -7,6 +7,14 @@ import { updateUserData } from "./redux/actions/Form/updateUserAction";
 import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
 
 const App = () => {
+
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    email: "",
+    age: "",
+    password: "",
+  });
+  
   const [formData, setFormData] = useState({
     name: "xyz",
     email: "xyz@gmail.com",
@@ -20,11 +28,52 @@ const App = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  
+    // Validation logic for each field
+
+    let error = "";
+
+    switch (name) {
+      case "name":
+        if (value.trim() === "") {
+          error = "Name is required";
+        }
+        else if(value.trim().length < 2) {
+          error = "Name must be at least 2 characters";
+        }
+
+        break;
+      case "email":
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Invalid email format";
+        }
+        break;
+      case "age":
+        const ageValue = parseInt(value);
+        if (isNaN(ageValue) || ageValue < 0 || ageValue > 150) {
+          error = "Age must be between 0 and 150";
+        }
+        break;
+      case "password":
+        if (value.length < 6) {
+          error = "Password must be at least 6 characters";
+        }
+        break;
+  
+      default:
+        break;
+    }
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,13 +84,15 @@ const App = () => {
     } else {
       dispatch(addUserData({ id: Math.random(), ...formData }));
     }
-
+    
     setFormData({ name: "", email: "" , age : "", password: "" });
     toast.success("Thank you for submitting", {
       icon: "🚀",
     });
+    
+    
   };
-
+  
   const handleEdit = (id) => {
     const userToEdit = userDataContainer.find((item) => item.id === id);
     setFormData({ name: userToEdit.name, email: userToEdit.email , age: userToEdit.age , password : userToEdit.password});
@@ -62,42 +113,55 @@ const App = () => {
     <div className="container my-5">
       <h3 className="text-center m-5">Redux demo using CRUD</h3>
       <form onSubmit={handleSubmit}>
-        <input
-          required
-          className="form-control m-3"
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleInputChange}
-        />
-        <input
-          required
-          type="email"
-          className="form-control m-3"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-        <input
-          required
-          type="number"
-          className="form-control m-3"
-          name="age"
-          placeholder="Enter your age"
-          value={formData.age}
-          onChange={handleInputChange}
-        />
-        <input
-          required
-          type="password"
-          className="form-control m-3"
-          name="password"
-          placeholder="Enter your password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
+      <input
+  required
+  className="form-control m-3"
+  type="text"
+  name="name"
+  placeholder="Name"
+  value={formData.name}
+  onChange={handleInputChange}
+/>
+{formErrors.name && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">
+  {formErrors.name}
+</div>
+}
+
+<input
+  required
+  type="email"
+  className="form-control m-3"
+  name="email"
+  placeholder="Email"
+  value={formData.email}
+  onChange={handleInputChange}
+/>
+{formErrors.email && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.email}</div>}
+
+<input
+  required
+  type="number"
+  className="form-control m-3"
+  name="age"
+  placeholder="Enter your age"
+  value={formData.age}
+  onChange={handleInputChange}
+/>
+{formErrors.age && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.age}</div>}
+
+<input
+  required
+  type="password"
+  className="form-control m-3"
+  name="password"
+  placeholder="Enter your password"
+  value={formData.password}
+  onChange={handleInputChange}
+/>
+{formErrors.password && (
+  <div class="alert alert-danger m-3 border text-center w-50 p-2" role="alert">{formErrors.password}</div>
+)}
+
         <button className="btn m-3 btn-dark" type="submit">
           {editTableData ? "Update" : "Add"}
         </button>

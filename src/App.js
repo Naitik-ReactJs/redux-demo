@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addData } from "./redux/actions/Form/addDataToTableAction";
-import { updateData } from "./redux/actions/Form/updateTableDataAction";
-import { deleteData } from "./redux/actions/Form/deleteTableDataAction";
+import { addUserData } from "./redux/actions/Form/addUserAction";
+import { updateUserData } from "./redux/actions/Form/updateUserAction";
+import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -27,11 +27,11 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editTableData) {
-      dispatch(updateData({ id: dataId, ...formData }));
+      dispatch(updateUserData({ id: dataId, ...formData }));
       setEditTableData(false);
       setDataId(null);
     } else {
-      dispatch(addData({ id: Math.random(), ...formData }));
+      dispatch(addUserData({ id: Math.random(), ...formData }));
     }
 
     setFormData({ name: "", email: "" });
@@ -41,8 +41,8 @@ const App = () => {
   };
 
   const handleEdit = (id) => {
-    const dataToEdit = dataContainer.find((item) => item.id === id);
-    setFormData({ name: dataToEdit.name, email: dataToEdit.email });
+    const userToEdit = dataContainer.find((item) => item.id === id);
+    setFormData({ name: userToEdit.name, email: userToEdit.email });
     setEditTableData(true);
     setDataId(id);
   };
@@ -51,11 +51,10 @@ const App = () => {
     if (editTableData) {
       toast.warning("Please complete the editing first ");
     } else {
-      dispatch(deleteData(id));
+      dispatch(deleteUserData(id));
       toast.info("Deleted successfully");
     }
   };
-
   return (
     <div className="container my-5">
       <h3 className="text-center m-5">Redux demo using CRUD</h3>

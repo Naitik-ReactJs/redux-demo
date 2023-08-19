@@ -10,10 +10,12 @@ const App = () => {
   const [formData, setFormData] = useState({
     name: "xyz",
     email: "xyz@gmail.com",
+    age : "23",
+    password : "password"
   });
   const [editTableData, setEditTableData] = useState(false);
   const [dataId, setDataId] = useState(null);
-  const dataContainer = useSelector((state) => state.dataContainer);
+  const userDataContainer = useSelector((state) => state.userDataContainer);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -34,17 +36,18 @@ const App = () => {
       dispatch(addUserData({ id: Math.random(), ...formData }));
     }
 
-    setFormData({ name: "", email: "" });
+    setFormData({ name: "", email: "" , age : "", password: "" });
     toast.success("Thank you for submitting", {
       icon: "🚀",
     });
   };
 
   const handleEdit = (id) => {
-    const userToEdit = dataContainer.find((item) => item.id === id);
-    setFormData({ name: userToEdit.name, email: userToEdit.email });
+    const userToEdit = userDataContainer.find((item) => item.id === id);
+    setFormData({ name: userToEdit.name, email: userToEdit.email , age: userToEdit.age , password : userToEdit.password});
     setEditTableData(true);
     setDataId(id);
+    console.log(id)
   };
 
   const handleDelete = (id) => {
@@ -70,11 +73,29 @@ const App = () => {
         />
         <input
           required
-          type="text"
+          type="email"
           className="form-control m-3"
           name="email"
           placeholder="Email"
           value={formData.email}
+          onChange={handleInputChange}
+        />
+        <input
+          required
+          type="number"
+          className="form-control m-3"
+          name="age"
+          placeholder="Enter your age"
+          value={formData.age}
+          onChange={handleInputChange}
+        />
+        <input
+          required
+          type="password"
+          className="form-control m-3"
+          name="password"
+          placeholder="Enter your password"
+          value={formData.password}
           onChange={handleInputChange}
         />
         <button className="btn m-3 btn-dark" type="submit">
@@ -87,16 +108,20 @@ const App = () => {
             <th scope="col">Sr.</th>
             <th scope="col">Name</th>
             <th scope="col">E-mail</th>
+            <th scope="col">Age</th>
+            <th scope="col">Password</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
 
-        {dataContainer.map((item, index) => (
+        {userDataContainer.map((item, index) => (
           <tbody className="table-hover" key={index}>
             <tr>
               <td>{index + 1}</td>
               <td>{item.name}</td>
               <td>{item.email}</td>
+              <td>{item.age}</td>
+              <td>{item.password}</td>
               <td>
                 <div className="container text-center p-2">
                   <button

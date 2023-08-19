@@ -1,5 +1,5 @@
 import { ADD_USER } from "../../constants";
-export const addUserData = (newData) => ({
+export const addUserData = (newUSerData) => ({
   type: ADD_USER,
-  payload: newData,
+  payload: newUSerData,
 });

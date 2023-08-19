@@ -2,30 +2,30 @@ import { ADD_USER } from "../constants";
 import { DELETE_USER } from "../constants";
 import { UPDATE_USER } from "../constants";
 const initialState = {
-  dataContainer: [{ id: 1692273892964, name: "Demo name", email: "n@tg.co" }],
+  userDataContainer: [{ id: 1692273892964, name: "Demo name", email: "n@tg.co" , age: "23", password: "Naitik@Bhavsar17"}],
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_USER:
       return {
         ...state,
-        dataContainer: [...state.dataContainer, action.payload],
+        userDataContainer: [...state.userDataContainer, action.payload],
       };
     case UPDATE_USER:
-      const updatedData = state.dataContainer.map((item) =>
+      const updatedData = state.userDataContainer.map((item) =>
         item.id === action.payload.id ? action.payload : item
       );
       return {
         ...state,
-        dataContainer: updatedData,
+        userDataContainer: updatedData,
       };
     case DELETE_USER:
-      const filteredData = state.dataContainer.filter(
+      const filteredData = state.userDataContainer.filter(
         (item) => item.id !== action.payload
       );
       return {
         ...state,
-        dataContainer: filteredData,
+        userDataContainer: filteredData,
       };
     default:
       return state;

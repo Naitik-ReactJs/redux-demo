@@ -19,7 +19,7 @@ const Form = ({
   value={formData.name}
   onChange={handleInputChange}
 />
-{formErrors.name && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">
+{formErrors.name && <div className="alert alert-danger m-3 border text-center w-25 p-2" role="alert">
   {formErrors.name}
 </div>
 }
@@ -33,7 +33,7 @@ const Form = ({
   value={formData.email}
   onChange={handleInputChange}
 />
-{formErrors.email && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.email}</div>}
+{formErrors.email && <div className="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.email}</div>}
 
 <input
   required
@@ -44,7 +44,7 @@ const Form = ({
   value={formData.age}
   onChange={handleInputChange}
 />
-{formErrors.age && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.age}</div>}
+{formErrors.age && <div className="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.age}</div>}
 
 <input
   required
@@ -55,6 +55,7 @@ const Form = ({
   value={formData.password}
   onChange={handleInputChange}
 />
+{formErrors.password && <div className="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.password}</div>}
       
       <button
         className={`btn m-3 btn-dark`}

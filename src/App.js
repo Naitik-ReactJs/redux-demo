@@ -5,21 +5,24 @@ import "react-toastify/dist/ReactToastify.css";
 import { addUserData } from "./redux/actions/Form/addUserAction";
 import { updateUserData } from "./redux/actions/Form/updateUserAction";
 import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
-
+import { min, max_Age } from "./redux/constants";
+import Form from "./components/Form";
+import Table from "./components/Table";
 const App = () => {
-
-  const [formErrors, setFormErrors] = useState({
+  const emptyUserData = {
     name: "",
     email: "",
     age: "",
     password: "",
-  });
-  
+  };
+
+  const [formErrors, setFormErrors] = useState(emptyUserData);
+
   const [formData, setFormData] = useState({
     name: "xyz",
     email: "xyz@gmail.com",
-    age : "23",
-    password : "password"
+    age: "23",
+    password: "password",
   });
   const [editTableData, setEditTableData] = useState(false);
   const [dataId, setDataId] = useState(null);
@@ -28,17 +31,12 @@ const App = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
-    // Validation logic for each field
-
     let error = "";
-
     switch (name) {
       case "name":
         if (value.trim() === "") {
           error = "Name is required";
-        }
-        else if(value.trim().length < 2) {
+        } else if (value.trim().length < min) {
           error = "Name must be at least 2 characters";
         }
 
@@ -50,7 +48,7 @@ const App = () => {
         break;
       case "age":
         const ageValue = parseInt(value);
-        if (isNaN(ageValue) || ageValue < 0 || ageValue > 150) {
+        if (isNaN(ageValue) || ageValue < min || ageValue > max_Age) {
           error = "Age must be between 0 and 150";
         }
         break;
@@ -59,7 +57,7 @@ const App = () => {
           error = "Password must be at least 6 characters";
         }
         break;
-  
+
       default:
         break;
     }
@@ -67,15 +65,13 @@ const App = () => {
       ...prevErrors,
       [name]: error,
     }));
-  
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
-  
 
-  const handleSubmit = (e) => {
+  const handleSubmitClick = (e) => {
     e.preventDefault();
     if (editTableData) {
       dispatch(updateUserData({ id: dataId, ...formData }));
@@ -84,26 +80,31 @@ const App = () => {
     } else {
       dispatch(addUserData({ id: Math.random(), ...formData }));
     }
-    
-    setFormData({ name: "", email: "" , age : "", password: "" });
+
+    setFormData(emptyUserData);
     toast.success("Thank you for submitting", {
       icon: "🚀",
     });
-    
-    
-  };
-  
-  const handleEdit = (id) => {
-    const userToEdit = userDataContainer.find((item) => item.id === id);
-    setFormData({ name: userToEdit.name, email: userToEdit.email , age: userToEdit.age , password : userToEdit.password});
-    setEditTableData(true);
-    setDataId(id);
-    console.log(id)
   };
 
-  const handleDelete = (id) => {
+  const handleEditClick = (id) => {
+    const userToEdit = userDataContainer.find((item) => item.id === id);
+    setFormData({
+      name: userToEdit.name,
+      email: userToEdit.email,
+      age: userToEdit.age,
+      password: userToEdit.password,
+    });
+    setEditTableData(true);
+    setDataId(id);  
+  };
+
+  const handleResetClick = () => {
+    setFormData(emptyUserData);
+  };
+  const handleDeleteClick = (id) => {
     if (editTableData) {
-      toast.warning("Please complete the editing first ");
+      toast.warning("Please complete the editing first");
     } else {
       dispatch(deleteUserData(id));
       toast.info("Deleted successfully");
@@ -112,100 +113,17 @@ const App = () => {
   return (
     <div className="container my-5">
       <h3 className="text-center m-5">Redux demo using CRUD</h3>
-      <form onSubmit={handleSubmit}>
-      <input
-  required
-  className="form-control m-3"
-  type="text"
-  name="name"
-  placeholder="Name"
-  value={formData.name}
-  onChange={handleInputChange}
-/>
-{formErrors.name && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">
-  {formErrors.name}
-</div>
-}
-
-<input
-  required
-  type="email"
-  className="form-control m-3"
-  name="email"
-  placeholder="Email"
-  value={formData.email}
-  onChange={handleInputChange}
-/>
-{formErrors.email && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.email}</div>}
-
-<input
-  required
-  type="number"
-  className="form-control m-3"
-  name="age"
-  placeholder="Enter your age"
-  value={formData.age}
-  onChange={handleInputChange}
-/>
-{formErrors.age && <div class="alert alert-danger m-3 border text-center w-25 p-2" role="alert">{formErrors.age}</div>}
-
-<input
-  required
-  type="password"
-  className="form-control m-3"
-  name="password"
-  placeholder="Enter your password"
-  value={formData.password}
-  onChange={handleInputChange}
-/>
-{formErrors.password && (
-  <div class="alert alert-danger m-3 border text-center w-50 p-2" role="alert">{formErrors.password}</div>
-)}
-
-        <button className="btn m-3 btn-dark" type="submit">
-          {editTableData ? "Update" : "Add"}
-        </button>
-      </form>
-      <table className="table table-secondary table-bordered table-striped mt-4">
-        <thead className="thead-dark">
-          <tr>
-            <th scope="col">Sr.</th>
-            <th scope="col">Name</th>
-            <th scope="col">E-mail</th>
-            <th scope="col">Age</th>
-            <th scope="col">Password</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-
-        {userDataContainer.map((item, index) => (
-          <tbody className="table-hover" key={index}>
-            <tr>
-              <td>{index + 1}</td>
-              <td>{item.name}</td>
-              <td>{item.email}</td>
-              <td>{item.age}</td>
-              <td>{item.password}</td>
-              <td>
-                <div className="container text-center p-2">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handleEdit(item.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-danger mx-2"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        ))}
-      </table>
+      <Form         formData={formData}
+        formErrors={formErrors}
+        editTableData={editTableData}
+        handleInputChange={handleInputChange}
+        handleSubmitClick={handleSubmitClick}
+        handleResetClick={handleResetClick}/>
+           <Table
+        userDataContainer={userDataContainer}
+        handleEditClick={handleEditClick}
+        handleDeleteClick={handleDeleteClick}
+      />
       <ToastContainer autoClose={2000} theme="colored" />
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-
+import Button from "./Button";
 const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
   return (
     <table className="table table-secondary table-bordered table-striped mt-4">
@@ -23,18 +23,16 @@ const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
             <td>{item.password}</td>
             <td>
               <div className="container text-center p-2">
-                <button
+                <Button
                   className="btn btn-primary"
                   onClick={() => handleEditClick(item.id)}
-                >
-                  Edit
-                </button>
-                <button
+                  buttonText="Edit"
+                />
+                <Button
                   className="btn btn-danger mx-2"
                   onClick={() => handleDeleteClick(item.id)}
-                >
-                  Delete
-                </button>
+                  buttonText="Delete"
+                />
               </div>
             </td>
           </tr>

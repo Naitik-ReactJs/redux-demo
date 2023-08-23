@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./Button";
+import Button from "../reusable/Button";
 const Form = ({
   formData,
   formErrors,
@@ -81,21 +81,12 @@ const Form = ({
           {formErrors.password}
         </div>
       )}
-      {editTableData ? (
-        <Button
-          className={"btn m-3 btn-dark"}
-          type="submit"
-          disabled={!Object.values(formErrors).every((item) => item === "")}
-          buttonText={"Update"}
-        ></Button>
-      ) : (
-        <Button
-          className={"btn m-3 btn-dark"}
-          type="submit"
-          disabled={!Object.values(formErrors).every((item) => item === "")}
-          buttonText={"Add"}
-        ></Button>
-      )}
+      <Button
+        className={"btn m-3 btn-dark"}
+        type="submit"
+        disabled={!Object.values(formErrors).every((item) => item === "")}
+        buttonText={`${editTableData}` === "true" ? "Update" : "Add"}
+      ></Button>
       <Button
         className={"btn btn-danger"}
         type="button"

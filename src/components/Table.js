@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./Button";
+import Button from "../reusable/Button";
 const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
   return (
     <table className="table table-secondary table-bordered table-striped mt-4">

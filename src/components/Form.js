@@ -21,7 +21,7 @@ const Form = ({
       />
       {formErrors.name && (
         <div
-          className="alert alert-danger m-3 border text-center w-25 p-2"
+          className="alert alert-danger m-3 border text-center w-50 p-2"
           role="alert"
         >
           {formErrors.name}
@@ -75,7 +75,7 @@ const Form = ({
       />
       {formErrors.password && (
         <div
-          className="alert alert-danger m-3 border text-center w-25 p-2"
+          className="alert alert-danger m-3 border text-center w-50 p-2"
           role="alert"
         >
           {formErrors.password}

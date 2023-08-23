@@ -5,9 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { addUserData } from "./redux/actions/Form/addUserAction";
 import { updateUserData } from "./redux/actions/Form/updateUserAction";
 import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
-import { min_length, max_Age } from "./redux/constants";
+import { min_length, min_password_length } from "./redux/constants";
 import Form from "./components/Form";
 import Table from "./components/Table";
+
 const App = () => {
   const emptyUserData = {
     name: "",
@@ -38,22 +39,24 @@ const App = () => {
           error = "Name is required";
         } else if (value.trim().length < min_length) {
           error = "Name must be at least 2 characters";
+        } else if (!/^[a-zA-Z\s]*$/.test(value)) {
+          error = "Name cannot contain numbers or special characters";
         }
 
         break;
       case "email":
-        if (!/\S+@\S+\.\S+/.test(value)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           error = "Invalid email format";
         }
         break;
       case "age":
         const ageValue = parseInt(value);
         if (isNaN(ageValue) || ageValue < 0) {
-          error = "Age must be greater than zero";
+          error = "Age cannot be negative";
         }
         break;
       case "password":
-        if (value.length < 6) {
+        if (value.length < min_password_length) {
           error = "Password must be at least 6 characters";
         }
         break;

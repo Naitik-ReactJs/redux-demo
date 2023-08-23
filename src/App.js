@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { addUserData } from "./redux/actions/Form/addUserAction";
 import { updateUserData } from "./redux/actions/Form/updateUserAction";
 import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
-import { min, max_Age } from "./redux/constants";
+import { min_length, max_Age } from "./redux/constants";
 import Form from "./components/Form";
 import Table from "./components/Table";
 const App = () => {
@@ -36,7 +36,7 @@ const App = () => {
       case "name":
         if (value.trim() === "") {
           error = "Name is required";
-        } else if (value.trim().length < min) {
+        } else if (value.trim().length < min_length) {
           error = "Name must be at least 2 characters";
         }
 
@@ -48,8 +48,8 @@ const App = () => {
         break;
       case "age":
         const ageValue = parseInt(value);
-        if (isNaN(ageValue) || ageValue < min || ageValue > max_Age) {
-          error = "Age must be between 0 and 150";
+        if (isNaN(ageValue) || ageValue < 0) {
+          error = "Age must be greater than zero";
         }
         break;
       case "password":
@@ -78,7 +78,9 @@ const App = () => {
       setEditTableData(false);
       setDataId(null);
     } else {
-      dispatch(addUserData({ id: Math.random(), ...formData }));
+      setTimeout(() => {
+        dispatch(addUserData({ id: Math.random(), ...formData }));
+      }, 700);
     }
 
     setFormData(emptyUserData);
@@ -96,7 +98,7 @@ const App = () => {
       password: userToEdit.password,
     });
     setEditTableData(true);
-    setDataId(id);  
+    setDataId(id);
   };
 
   const handleResetClick = () => {
@@ -113,13 +115,15 @@ const App = () => {
   return (
     <div className="container my-5">
       <h3 className="text-center m-5">Redux demo using CRUD</h3>
-      <Form         formData={formData}
+      <Form
+        formData={formData}
         formErrors={formErrors}
         editTableData={editTableData}
         handleInputChange={handleInputChange}
         handleSubmitClick={handleSubmitClick}
-        handleResetClick={handleResetClick}/>
-           <Table
+        handleResetClick={handleResetClick}
+      />
+      <Table
         userDataContainer={userDataContainer}
         handleEditClick={handleEditClick}
         handleDeleteClick={handleDeleteClick}

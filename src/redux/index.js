@@ -1,18 +1,16 @@
 import {
   legacy_createStore as createStore,
-  // applyMiddleware,
-  // compose,
+  applyMiddleware,
+  compose,
 } from "redux";
 import reducer from "./reducers/formReducer";
-// import thunk from "redux-thunk";
-// const enhancers = [
-//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-//   applyMiddleware(thunk),
-// ];
+import thunk from "redux-thunk";
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(
   reducer,
-  // compose(...enhancers)
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;

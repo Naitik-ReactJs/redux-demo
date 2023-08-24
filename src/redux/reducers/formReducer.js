@@ -1,3 +1,4 @@
+
 import { ADD_USER } from "../constants";
 import { DELETE_USER } from "../constants";
 import { UPDATE_USER } from "../constants";
@@ -11,21 +12,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         userDataContainer: [...state.userDataContainer, action.payload],
       };
-    case UPDATE_USER:
-      const updatedData = state.userDataContainer.map((item) =>
-        item.id === action.payload.id ? action.payload : item
-      );
-      return {
-        ...state,
-        userDataContainer: updatedData,
-      };
+      case UPDATE_USER:
+        return {
+          ...state,
+          userDataContainer: action.payload,
+        };
+      
     case DELETE_USER:
-      const filteredData = state.userDataContainer.filter(
-        (item) => item.id !== action.payload
-      );
+ 
       return {
         ...state,
-        userDataContainer: filteredData,
+        userDataContainer: action.payload,
       };
     default:
       return state;

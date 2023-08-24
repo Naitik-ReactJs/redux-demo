@@ -13,6 +13,7 @@ const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
         </tr>
       </thead>
       <tbody>
+        {console.log('userDataContainer', userDataContainer)}
         {userDataContainer.map((item, index) => (
           <tr key={index}>
             <td>{index + 1}</td>

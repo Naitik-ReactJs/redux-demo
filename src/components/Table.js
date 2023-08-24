@@ -1,16 +1,15 @@
 import React from "react";
 import Button from "../reusable/Button";
 const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
+  const tableHeading = ["Sr.", "Name", "E-mail", "Age", "Password", "Actions"];
+
   return (
     <table className="table table-secondary table-bordered table-striped mt-4">
       <thead className="thead-dark">
         <tr>
-          <th scope="col">Sr.</th>
-          <th scope="col">Name</th>
-          <th scope="col">E-mail</th>
-          <th scope="col">Age</th>
-          <th scope="col">Password</th>
-          <th scope="col">Actions</th>
+          {tableHeading.map((item, index) => (
+            <th key={index}> {item}</th>
+          ))}
         </tr>
       </thead>
       <tbody>

@@ -5,11 +5,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { addUserData } from "./redux/actions/Form/addUserAction";
 import { updateUserData } from "./redux/actions/Form/updateUserAction";
 import { deleteUserData } from "./redux/actions/Form/deleteUserAction";
-import { min_length, min_password_length } from "./redux/constants";
 import Form from "./components/Form";
 import Table from "./components/Table";
 
 const App = () => {
+  const min_password_length = 6;
+  const min_length = 2;
   const emptyUserData = {
     name: "",
     email: "",
@@ -51,7 +52,9 @@ const App = () => {
         break;
       case "age":
         const ageValue = parseInt(value);
-        if (isNaN(ageValue) || ageValue < 0) {
+        if (isNaN(ageValue)) {
+          error = "Age is required";
+        } else if (ageValue < 0) {
           error = "Age cannot be negative";
         }
         break;

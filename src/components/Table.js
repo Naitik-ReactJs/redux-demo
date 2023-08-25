@@ -13,14 +13,12 @@ const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
         </tr>
       </thead>
       <tbody>
-        {console.log('userDataContainer', userDataContainer)}
+        {console.log("userDataContainer", userDataContainer)}
         {userDataContainer.map((item, index) => (
           <tr key={index}>
-            <td>{index + 1}</td>
-            <td>{item.name}</td>
-            <td>{item.age}</td>
-            <td>{item.email}</td>
-            <td>{item.password}</td>
+            {Object.values(item).map((heading, index) => (
+              <td key={index}> {heading} </td>
+            ))}
             <td>
               <div className="container text-center p-2">
                 <Button

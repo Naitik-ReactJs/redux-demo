@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../reusable/Button";
 const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
-  const tableHeading = ["Sr.", "Name", "E-mail", "Age", "Password", "Actions"];
+  const tableHeading = ["Sr.", "Name", "Age", "E-mail", "Password", "Actions"];
 
   return (
     <table className="table table-secondary table-bordered table-striped mt-4">
@@ -18,8 +18,8 @@ const table = ({ userDataContainer, handleEditClick, handleDeleteClick }) => {
           <tr key={index}>
             <td>{index + 1}</td>
             <td>{item.name}</td>
-            <td>{item.email}</td>
             <td>{item.age}</td>
+            <td>{item.email}</td>
             <td>{item.password}</td>
             <td>
               <div className="container text-center p-2">

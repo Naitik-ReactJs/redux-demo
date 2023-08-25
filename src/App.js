@@ -36,9 +36,7 @@ const App = () => {
     let error = "";
     switch (name) {
       case "name":
-        if (value.trim() === "") {
-          error = "Name is required";
-        } else if (value.trim().length < min_length) {
+        if (value.trim().length < min_length) {
           error = "Name must be at least 2 characters";
         } else if (!/^[a-zA-Z\s]*$/.test(value)) {
           error = "Name cannot contain numbers or special characters";
@@ -46,15 +44,16 @@ const App = () => {
 
         break;
       case "email":
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (
+          !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+            value
+          )
+        ) {
           error = "Invalid email format";
         }
         break;
       case "age":
-        const ageValue = parseInt(value);
-        if (isNaN(ageValue)) {
-          error = "Age is required";
-        } else if (ageValue < 0) {
+        if (!/^[0-9]+$/.test(value)) {
           error = "Age cannot be negative";
         }
         break;
@@ -109,6 +108,7 @@ const App = () => {
 
   const handleResetClick = () => {
     setFormData(emptyUserData);
+    setFormErrors(emptyUserData);
   };
   const handleDeleteClick = (id) => {
     if (editTableData) {

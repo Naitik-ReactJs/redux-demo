@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Button from "../reusable/Button";
 const Form = ({
   formData,
@@ -17,18 +17,18 @@ const Form = ({
       formErrors: formErrors.name,
     },
     {
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email address",
-      value: formData.email,
-      formErrors: formErrors.email,
-    },
-    {
       type: "number",
       name: "age",
       placeholder: "Enter your age",
       value: formData.age,
       formErrors: formErrors.age,
+    },
+    {
+      type: "email",
+      name: "email",
+      placeholder: "Enter your email address",
+      value: formData.email,
+      formErrors: formErrors.email,
     },
     {
       type: "password",
@@ -40,9 +40,9 @@ const Form = ({
   ];
   return (
     <form onSubmit={handleSubmitClick}>
-      {input.map((item) => {
+      {input.map((item, index) => {
         return (
-          <>
+          <Fragment key={index}>
             <input
               required
               className="form-control m-3"
@@ -54,13 +54,14 @@ const Form = ({
             />
             {item.formErrors && (
               <div
+                key={index}
                 className="alert alert-danger m-3 border text-center w-50 p-2"
                 role="alert"
               >
                 {item.formErrors}
               </div>
             )}
-          </>
+          </Fragment>
         );
       })}
       <Button
